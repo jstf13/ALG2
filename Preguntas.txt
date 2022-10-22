@@ -1,0 +1,2 @@
+Ejercicio 1 - Da error en 1000.txt
+Ejercicio 3 - Debe ser con kruskal

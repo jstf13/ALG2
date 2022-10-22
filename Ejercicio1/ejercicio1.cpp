@@ -136,6 +136,7 @@ public:
 
     void rehash()
     {
+        cout << "Rehashing..." << endl;
         List *nuevaTabla = new List[tam * 2];
         for (int i = 0; i < tam * 2; i++)
         {
@@ -153,6 +154,8 @@ public:
         }
         tabla = nuevaTabla;
         tam = tam * 2;
+        cout << "Nuevo tamaño: " << tam << endl;
+        cout << "Rehashing done!" << endl;
     };    
 
     void insertar(string clave, int valor)
@@ -223,8 +226,10 @@ int main()
         tabla.insertar(email, 1);
         users--;
     }
+
+    tabla.imprimir();
     
-   cout << tabla.numElem << endl;
+    cout << tabla.numElem << endl;
 
     return 0;
 }
