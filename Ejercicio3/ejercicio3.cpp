@@ -1,186 +1,260 @@
 #include <cstdlib>
-#include <vector>
 #include <iostream>
 #include <cassert>
-#include <unordered_map>
-#include <algorithm>
+
 using namespace std;
 
-struct Edge
+template <class T>
+struct NodoLista
 {
-    int origin;
-    int destiny;
-    int weight;
-    Edge(int origin, int destiny, int weight) : origin(origin), destiny(destiny), weight(weight) {}
+    T dato;
+    NodoLista *sig;
+    NodoLista(T &aData) : dato(aData), sig(0) {}
+    NodoLista(T &aData, NodoLista *aSig) : dato(aData), sig(aSig) {}
 };
 
-typedef vector<Edge> *ListaAristas;
+struct Arista
+{
+    int origen;
+    int destino;
+    int weight;
+    Arista(int aOrigen, int aDestino, int aWeight) : origen(aOrigen), destino(aDestino), weight(aWeight) {}
+};
+
+typedef NodoLista<Arista> *ListaAristas;
 
 class Grafo
 {
 public:
-    virtual void insertarArista(int origin, int destiny, int weight) = 0;
-    virtual vector<Edge> getListaAdyacencia() = 0;
-    // virtual ListaAristas adyacentes(int origin) = 0;
-    // virtual void dfs(int salida, bool listaVisitados[]) = 0;
+    virtual void insertarArista(int origen, int destino, int weight) = 0;
+    virtual ListaAristas adyacentes(int origen) = 0;
+    virtual void dfs(int salida, bool listaVisitados[]) = 0;
+    virtual void sortAdyacentList(ListaAristas *list, int amountOfVertex) = 0;
+    virtual ListaAristas *getAdyacentList() = 0;
     virtual void imprimir() = 0;
 };
 
 class ListaAdyacencia : public Grafo
 {
 private:
-    vector<Edge> listaAdyacencia;
+    ListaAristas *listaAdyacencia;
     int vertice;
-    int edge;
-    int destiny;
+    int arista;
+    int destino;
 
 public:
     ListaAdyacencia(int cantidadVertices)
     {
-        this->listaAdyacencia = vector<Edge>(cantidadVertices + 1);
+        this->listaAdyacencia = new ListaAristas[cantidadVertices + 1];
         this->vertice = cantidadVertices;
-        this->edge = 0;
-        this->destiny = 0;
+        this->arista = 0;
+        this->destino = 0;
+
+        for (int i = 1; i <= cantidadVertices; i++)
+        {
+            listaAdyacencia[i] = 0;
+        }
     }
 
-    vector<Edge> getListaAdyacencia()
+    void insertarArista(int origen, int destino, int wheight)
+    {
+        Arista a = Arista(origen, destino, wheight);
+        NodoLista<Arista> *nuevo = new NodoLista<Arista>(a, listaAdyacencia[origen]);
+        listaAdyacencia[origen] = nuevo;
+
+        if (origen != destino)
+        {
+            Arista a2 = Arista(destino, origen, wheight);
+            NodoLista<Arista> *nuevo2 = new NodoLista<Arista>(a2, listaAdyacencia[destino]);
+            listaAdyacencia[destino] = nuevo2;
+        }
+    }
+
+    ListaAristas adyacentes(int origen)
+    {
+        ListaAristas listaARetornar = NULL;
+        ListaAristas aux = listaAdyacencia[origen];
+
+        while (aux != NULL)
+        {
+            Arista aristaAux = aux->dato;
+            listaARetornar = new NodoLista<Arista>(aristaAux, listaARetornar);
+            aux = aux->sig;
+        }
+        return listaARetornar;
+    }
+
+    void dfs(int salida, bool listaVisitados[])
+    {
+        listaVisitados[salida] = true;
+        ListaAristas adyacentes = listaAdyacencia[salida];
+
+        while (adyacentes != NULL)
+        {
+            // cout << "while dfs adentro" << endl;
+            if (adyacentes->dato.destino && listaVisitados[adyacentes->dato.destino] == false)
+            {
+                destino = adyacentes->dato.destino;
+                dfs(destino, listaVisitados);
+            }
+            adyacentes = adyacentes->sig;
+        }
+    }
+
+    // void sortAdyacentList() with bubble sort and sort by weight
+    void sortAdyacentList(ListaAristas *list, int amountOfVertex)
+    {
+        for (int i = 0; i < amountOfVertex; i++)
+        {
+            ListaAristas aux = list[i];
+            ListaAristas aux2 = list[i];
+            while (aux != NULL)
+            {
+                while (aux2 != NULL)
+                {
+                    if (aux->dato.destino < aux2->dato.destino)
+                    {
+                        Arista auxArista = aux->dato;
+                        aux->dato = aux2->dato;
+                        aux2->dato = auxArista;
+                    }
+                    aux2 = aux2->sig;
+                }
+                aux = aux->sig;
+                aux2 = list[i];
+            }
+        }
+    }
+
+    ListaAristas *getAdyacentList()
     {
         return this->listaAdyacencia;
     }
 
-    void insertarArista(int origin, int destiny, int weight)
-    {
-        Edge e = Edge(origin, destiny, weight);
-        listaAdyacencia.push_back(e);
-
-        if (origin != destiny)
-        {
-            Edge e2 = Edge(destiny, origin, weight);
-            listaAdyacencia.push_back(e2);
-        }
-    }
-
-    // ListaAristas adyacentes(int origin)
-    // {
-    //     ListaAristas listaARetornar = NULL;
-    //     ListaAristas aux = listaAdyacencia[origin];
-
-    //     while (aux != NULL)
-    //     {
-    //         Edge aristaAux = aux->dato;
-    //         listaARetornar = new NodoLista<Edge>(aristaAux, listaARetornar);
-    //         aux = aux->sig;
-    //     }
-    //     return listaARetornar;
-    // }
-
-    // void dfs(int salida, bool listaVisitados[])
-    // {
-    //     listaVisitados[salida] = true;
-    //     ListaAristas adyacentes = listaAdyacencia[salida];
-
-    //     while (adyacentes != NULL)
-    //     {
-    //         // cout << "while dfs adentro" << endl;
-    //         if (adyacentes->dato.destiny && listaVisitados[adyacentes->dato.destiny] == false)
-    //         {
-    //             destiny = adyacentes->dato.destiny;
-    //             dfs(destiny, listaVisitados);
-    //         }
-    //         adyacentes = adyacentes->sig;
-    //     }
-    // }
-
     void imprimir()
     {
-        for (int i = 0; i < listaAdyacencia.size(); i++)
+        for (int i = 1; i <= vertice; i++)
         {
-            cout << listaAdyacencia[i].origin << " " << listaAdyacencia[i].destiny << " " << listaAdyacencia[i].weight << endl;
+            ListaAristas adyacentes = listaAdyacencia[i];
+            while (adyacentes != NULL)
+            {
+                cout << i << " " << adyacentes->dato.destino << " " << adyacentes->dato.weight << endl;
+                adyacentes = adyacentes->sig;
+            }
         }
     }
 };
 
-class DisjointSet
+// disjoin set
+class DisjoinSet
 {
-    unordered_map<int, int> parent;
- 
+private:
+    int *parent;
+    int *rank;
+    int n;
+
 public:
-    // realizar la operación MakeSet
-    void makeSet(int n)
+    DisjoinSet(int n)
     {
-        // crea `n` conjuntos disjuntos (uno para cada vértice)
-        for (int i = 0; i < n; i++) {
+        this->n = n;
+        this->parent = new int[n + 1];
+        this->rank = new int[n + 1];
+
+        for (int i = 0; i <= n; i++)
+        {
+            rank[i] = 0;
             parent[i] = i;
         }
     }
- 
-    // Encuentra la raíz del conjunto al que pertenece el elemento `k`
-    int Find(int k)
-    {
-        // si `k` es root
-        if (parent[k] == k) {
-            return k;
-        }
- 
-        // recurre para el padre hasta que encontramos la raíz
-        return Find(parent[k]);
-    }
- 
-    // Realizar Unión de dos subconjuntos
-    void Union(int a, int b)
-    {
-        // encuentra la raíz de los conjuntos en los que se encuentran los elementos
-        // Pertenece `x` e `y`
-        int x = Find(a);
-        int y = Find(b);
- 
-        parent[x] = y;
-    }
-};
 
-struct compare
-{
-    bool operator() (Edge const &a, Edge const &b) const {
-        return a.weight > b.weight;
-    }
-};
-
-// Función para construir MST usando el algoritmo de Kruskal
-vector<Edge> runKruskalAlgorithm(vector<Edge> edges, int n)        
-{
-    // almacena los arista presentes en MST
-    vector<Edge> MST;
- 
-    // inicializa la clase `DisjointSet`
-    DisjointSet ds;
- 
-    // crea un conjunto singleton para cada elemento del universo
-    ds.makeSet(n);
- 
-    // ordena las aristas aumentando el peso
-    sort(edges.begin(), edges.end(), compare());
- 
-    // MST contiene exactamente los arista `V-1`
-    while (MST.size() != n - 1)
+    int find(int u)
     {
-        // considera el siguiente borde con peso mínimo del graph
-        Edge next_edge = edges.back();
-        edges.pop_back();
- 
-        // encuentra la raíz de los conjuntos a los que pertenecen dos extremos
-        // los vértices de la siguiente arista pertenecen
-        int x = ds.Find(next_edge.origin);
-        int y = ds.Find(next_edge.destiny);
- 
-        // si ambos extremos tienen diferentes padres, pertenecen a
-        // diferentes componentes conectados y se pueden incluir en MST
-        if (x != y)
+        if (u != parent[u])
         {
-            MST.push_back(next_edge);
-            ds.Union(x, y);
+            parent[u] = find(parent[u]);
+        }
+        return parent[u];
+    }
+
+    void merge(int x, int y)
+    {
+        x = find(x);
+        y = find(y);
+
+        if (rank[x] > rank[y])
+        {
+            parent[y] = x;
+        }
+        else
+        {
+            parent[x] = y;
+        }
+
+        if (rank[x] == rank[y])
+        {
+            rank[y]++;
         }
     }
-    return MST;
+};
+
+// Kruksal with disjoint set implementation with NodoLista
+int kruskal(ListaAdyacencia list, int cantidadVertices, NodoLista<int> *vertexToIgnore, int amountOfVertexToIgnore)
+{
+    ListaAristas *adyacentList = list.getAdyacentList();
+    // inicializar el conjunto disjunto
+    DisjoinSet *disjoinSet = new DisjoinSet(cantidadVertices);
+ 
+    // inicializar el índice para el resultado
+    int index = 0;
+ 
+    // inicializar el resultado
+    ListaAristas *resultado = new ListaAristas[cantidadVertices];
+ 
+    // ordenar las aristas en orden creciente de peso
+    list.sortAdyacentList(adyacentList, cantidadVertices);
+
+cout << "------------------" << endl;
+    list.imprimir();
+cout << "------------------" << endl;
+
+ 
+    // recorrer las aristas ordenadas
+    for (int i = 1; i <= cantidadVertices; i++)
+    {
+        ListaAristas adyacentes = adyacentList[i];
+        while (adyacentes != NULL)
+        {
+            int origen = adyacentes->dato.origen;
+            int destino = adyacentes->dato.destino;
+ 
+            int x = disjoinSet->find(origen);
+            int y = disjoinSet->find(destino);
+ 
+            //Si no existen en vertexToIgnore
+            NodoLista<int> *aux = vertexToIgnore;
+            bool isIgnored = false;
+            for (int i = 0; i < amountOfVertexToIgnore; i++)
+            {
+                if (x == aux->dato || y == aux->dato)
+                    isIgnored = true;
+                aux = aux->sig;
+            }
+            
+            // si no forma un ciclo, incluir la arista
+            if (x != y && !isIgnored)
+            {
+                resultado[index] = new NodoLista<Arista>(adyacentes->dato, resultado[index]);
+                index++;
+                disjoinSet->merge(x, y);
+            }
+            adyacentes = adyacentes->sig;
+        }
+    }
+    // print resultado
+    for (int i = 0; i < index; i++)
+    {
+        cout << resultado[i]->dato.origen << " " << resultado[i]->dato.destino << " " << resultado[i]->dato.weight << endl;
+    }   
 }
 
 bool *inicializarVisitados(int cantidadVertices, bool visitados[])
@@ -202,10 +276,13 @@ int main(){
     int destinyVertex;
     int weight;
 
+    int amoutOfVertexToIgnore;
+    int vetexToIgnore;
+
     cin >> vertexAmount;
     cin >> edgeAmount;
 
-    Grafo *grafo = new ListaAdyacencia(vertexAmount);
+    ListaAdyacencia *grafo = new ListaAdyacencia(vertexAmount);
 
     for (int i = 0; i < edgeAmount; i++)
     {
@@ -214,10 +291,23 @@ int main(){
         cin >> weight;
         grafo->insertarArista(originVertex, destinyVertex, weight);
     }
-
-    runKruskalAlgorithm(grafo->getListaAdyacencia(), vertexAmount);
-
     grafo->imprimir();
+
+    cin >> amoutOfVertexToIgnore;
+    NodoLista<int> *vertexToIgnore;
+
+    for (int i = 0; i < amoutOfVertexToIgnore; i++)
+    {
+        cin >> vetexToIgnore;
+        vertexToIgnore = new NodoLista<int>(vetexToIgnore, vertexToIgnore);
+    }
+
+
+    cout << "Kruskal" << endl;
+    cout << " " << endl;
+    kruskal(*grafo, vertexAmount, vertexToIgnore, amoutOfVertexToIgnore);
+    cout << " " << endl;
+    cout << "Kruskal end" << endl;
 
     return 0;
 }
