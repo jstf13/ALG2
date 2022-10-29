@@ -4,6 +4,133 @@
 
 using namespace std;
 
+struct Nodo{
+    int vertice;
+    int gradoDeEntrada;
+    Nodo (int v, int g) : vertice(v), gradoDeEntrada(g) {}
+    Nodo () : vertice(0), gradoDeEntrada(0) {}
+};
+
+class Max_Heap
+{
+private:
+    Nodo *heap;
+    int posicionTope;
+    int tam;
+
+    int izquierda(int i)
+    {
+        return 2 * i;
+    }
+
+    int derecha(int i)
+    {
+        return 2 * i + 1;
+    }
+
+    int padre(int i)
+    {
+        return i / 2;
+    }
+
+    void swap(int i, int j)
+    {
+        Nodo temp = heap[i];
+        heap[i] = heap[j];
+        heap[j] = temp;
+    }
+
+    void flotar(int i)
+    {
+        while (i > 1 && heap[padre(i)].gradoDeEntrada < heap[i].gradoDeEntrada)
+        {
+                swap(i, padre(i));
+                i = padre(i);
+        }
+        while(i > 1 && heap[padre(i)].gradoDeEntrada == heap[i].gradoDeEntrada && heap[padre(i)].vertice < heap[i].vertice){
+                swap(i, padre(i));
+                i = padre(i);
+        }
+    }
+
+    void hundir(int pos)
+    {
+        while (posicionTope > 1 && pos < posicionTope)
+        {
+            int izq = izquierda(pos);
+            int der = derecha(pos);
+            int max = pos;
+            if (izq < posicionTope && heap[izq].gradoDeEntrada > heap[max].gradoDeEntrada)
+                max = izq;
+            else
+            {
+                if (izq < posicionTope && heap[izq].gradoDeEntrada == heap[max].gradoDeEntrada && heap[izq].vertice > heap[max].vertice)
+                    max = izq;
+            }
+            if (der < posicionTope && heap[der].gradoDeEntrada > heap[max].gradoDeEntrada)
+                max = der;
+            else
+            {
+                if (der < posicionTope && heap[der].gradoDeEntrada == heap[max].gradoDeEntrada && heap[der].vertice > heap[max].vertice)
+                    max = der;
+            }
+            if (max != pos)
+            {
+                swap(pos, max);
+                pos = max;
+            }
+            else
+                break;
+        }
+    }
+
+public:
+    Max_Heap(int tam)
+    {
+        this->tam = tam;
+        posicionTope = 1;
+        heap = new Nodo[tam+1];
+    }
+
+    Nodo tope()
+    {
+        return this->heap[1];
+    }
+
+    void insertar(Nodo nuevoNodo)
+    {
+        assert(posicionTope <= tam);
+        heap[posicionTope] = nuevoNodo;
+        flotar(posicionTope);
+        posicionTope++;
+    }
+
+    void eliminarTope()
+    {
+        assert(posicionTope > 0);
+        posicionTope--;
+        swap(1, posicionTope);
+        hundir(1);
+    }
+
+    void imprimir()
+    {
+        for (int i = 1; i < posicionTope; i++)
+            cout << heap[i].vertice << " " << heap[i].gradoDeEntrada << endl;
+        cout << endl;
+    }
+
+    bool estaVacio()
+    {
+        return this->posicionTope == 0;
+    }
+
+    bool estaLleno()
+    {
+        return this->posicionTope == this->tam;
+    }
+};
+
 template <class T>
 struct NodoLista
 {
@@ -22,7 +149,7 @@ struct Arista
 
 typedef NodoLista<Arista> *ListaAristas;
 
-class Graph
+class Grafo
 {
 public:
     virtual void insertarArista(int origen, int destino) = 0;
@@ -31,7 +158,7 @@ public:
     virtual void imprimir() = 0;
 };
 
-class ListaAdyacencia : public Graph
+class ListaAdyacencia : public Grafo
 {
 private:
     ListaAristas *listaAdyacencia;
@@ -81,6 +208,7 @@ public:
 
         while (adyacentes != NULL)
         {
+            // cout << "while dfs adentro" << endl;
             if (adyacentes->dato.destino && listaVisitados[adyacentes->dato.destino] == false)
             {
                 destino = adyacentes->dato.destino;
@@ -104,11 +232,42 @@ public:
     }
 };
 
-bool *inicializarVisitados(int cantidadVertices, bool visitados[])
+
+int main()
 {
-    for (int i = 1; i <= cantidadVertices; i++)
+    int vertexAmount;
+    int edgeAmount;
+
+    int vertexStart;
+    int vertexEnd;
+
+    cin >> vertexAmount >> edgeAmount;
+
+    Nodo *nodos = new Nodo[vertexAmount + 1];
+    Max_Heap heap(vertexAmount);
+
+    for (int i = 1; i <= vertexAmount; i++)
     {
-        visitados[i] *= false;
+        nodos[i] = Nodo(i, 0);
     }
-    return visitados;
-}
+
+    for (int i = 1; i <= edgeAmount; i++)
+    {
+        cin >> vertexStart >> vertexEnd;
+        nodos[vertexEnd].gradoDeEntrada++;
+    }
+
+    for (int i = 1; i <= vertexAmount; i++)
+    {
+        heap.insertar(nodos[i]);
+    }
+    
+    for(int i = 1; i <= vertexAmount; i++)
+    {
+        Nodo nodo = heap.tope();
+        heap.eliminarTope();
+        cout << nodo.vertice << " " << nodo.gradoDeEntrada << endl;
+    }
+    
+    return 0;
+} 
