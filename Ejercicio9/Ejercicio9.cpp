@@ -115,7 +115,7 @@ int main()
     cin>> P; // cantidad casos de prueba
     
     int M = 0; // número al que se debe llegar con la suma
-    cin>> M;
+    //cin>> M;
 
     for (int i = 0; i < P; i++)
     {
