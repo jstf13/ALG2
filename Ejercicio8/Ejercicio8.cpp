@@ -3,8 +3,7 @@
 #include <iostream>
 using namespace std;
 
-
-void mochilaINFRecorrido(int capacidad, int cantidadObjetos, int pesos[])
+int **mochilaINFRecorrido(int capacidad, int cantidadObjetos, int conjunto[], int valores[])
 {
     int **m = new int *[cantidadObjetos + 1];
     for (int i = 0; i < cantidadObjetos + 1; i++)
@@ -16,59 +15,88 @@ void mochilaINFRecorrido(int capacidad, int cantidadObjetos, int pesos[])
     {
         for (int capacidadHasta = 0; capacidadHasta < capacidad + 1; capacidadHasta++)
         {
-            if (pesos[objetoHasta - 1] > capacidadHasta)
+            if (conjunto[objetoHasta - 1] > capacidadHasta)
             {
                 m[objetoHasta][capacidadHasta] = m[objetoHasta - 1][capacidadHasta];
             }
-        
             else
             {
-                int valorMochilaDePonerlo = pesos[objetoHasta - 1] + m[objetoHasta][capacidadHasta - pesos[objetoHasta - 1]];
+                int valorMochilaDePonerlo = valores[objetoHasta - 1] + m[objetoHasta][capacidadHasta - conjunto[objetoHasta - 1]];
                 int valorMochilaDeNOPonerlo = m[objetoHasta - 1][capacidadHasta];
                 m[objetoHasta][capacidadHasta] = valorMochilaDePonerlo > valorMochilaDeNOPonerlo ? valorMochilaDePonerlo : valorMochilaDeNOPonerlo;
             }
         }
     }
-
-    if (m[cantidadObjetos][capacidad] == capacidad) 
-    {
-        cout << "1" << endl;
-    } 
-    else 
-    {
-        cout << "0" << endl;
-    } 
+   return m;
 }
 
 int main()
 {
-    int N;
-    cin >> N; // cantidad de elementos 
-    
-    int valores[N];
-    int elemento;
-    
-    for (int i = 0; i<N; i++)
-    {
-        cin >> elemento;
-        valores[i] = elemento;
-    }
-    
-    int P;
-    cin>> P; // cantidad casos de prueba
-    
-    int X;
-    cin>> X; //Preguntar a qué refiere este número? Es igual a P?
 
-    int M = 0; // número al que se debe llegar con la suma
-    
-    for (int i = 0; i < P; i++)
+    int N;
+    cin >> N; // cantidad de objetos
+
+    int *elementos = new int[N + 1]();
+    for (int i = 1; i <= N; i++)
     {
-        cin>> M;
-        mochilaINFRecorrido(M, N, valores) ;
+        elementos[i] = 0;
     }
-   
+
+    int K; // cantidad de valores
+    int *valores = new int[N + 1]();
+    for (int i = 1; i < N + 1; i++)
+    {
+        cin >> K;
+        valores[i] = K;
+        elementos[i] = K;
+    }
+
+    int M;
+    cin >> M; // capacidad de la mochila
+
+    int **matriz = new int *[N + 1];
+    for (int i = 0; i < N + 1; i++)
+    {
+        matriz[i] = new int[N + 1]();
+    }
+    for (int i = 1; i < N + 1; i++)
+    {
+        for (int j = 0; j < N + 1; j++)
+        {
+            matriz[i][j] = 0;
+        }
+    }
+
+    matriz = mochilaINFRecorrido(M, N + 1, elementos, valores);
+
+    int P;
+    cin >> P;
+    int m;
+    for (int k = 1; k < P + 1; k++)
+    {
+        cin >> m;
+        int valor = matriz[N + 1][m];
+        if (k != P)
+        {
+            if (valor == m)
+            {
+                cout << "1" << endl;
+            }
+            else
+            {
+                cout << "0" << endl;
+            }
+        }else{
+           if (valor == m)
+            {
+                cout << "1";
+            }
+            else
+            {
+                cout << "0";
+            } 
+        }
+    }
+
     return 0;
 }
-
-
