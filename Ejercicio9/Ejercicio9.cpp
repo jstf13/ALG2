@@ -46,25 +46,30 @@ void desusarNumero(int numero, int index, int &resto, int *candidata, int &candi
     candidataMetrica--;
 }
 
-void sumatoria_bt(int resto, int *C, int N, int *candidata, int candidataMetrica, int *mejorSolucion, int &mejorSolucionMetrica)
+void sumatoria_bt(int index, int resto, int *C, int N, int *candidata, int candidataMetrica, int *mejorSolucion, int &mejorSolucionMetrica)
 {
-    if (!sePuedePodar(candidataMetrica, mejorSolucionMetrica))
-    {
-        if (esSolucion(resto) && esMejorSolucion(candidataMetrica, mejorSolucionMetrica))
+    if(index < N) {
+        if (!sePuedePodar(candidataMetrica, mejorSolucionMetrica))
         {
-            clonarSolucion(candidata, mejorSolucion, N);
-            mejorSolucionMetrica = candidataMetrica;
-        }
-        else
-        {
-            for (int i = 0; i < N; i++)
+            if (esSolucion(resto) && esMejorSolucion(candidataMetrica, mejorSolucionMetrica))
             {
-                int numero = C[i];
+                clonarSolucion(candidata, mejorSolucion, N);
+                mejorSolucionMetrica = candidataMetrica;
+            }
+            else
+            {
+                int numero = C[index];
                 if (puedoUsarNumero(resto, numero))
                 {
-                    usarNumero(numero, i, resto, candidata, candidataMetrica);
-                    sumatoria_bt(resto, C, N, candidata, candidataMetrica, mejorSolucion, mejorSolucionMetrica);
-                    desusarNumero(numero, i, resto, candidata, candidataMetrica);
+                    usarNumero(numero, index, resto, candidata, candidataMetrica);
+                    sumatoria_bt(index, resto, C, N, candidata, candidataMetrica, mejorSolucion, mejorSolucionMetrica);
+                    desusarNumero(numero, index, resto, candidata, candidataMetrica);
+                    //Pruebo sin el número
+                    sumatoria_bt(index + 1, resto, C, N, candidata, candidataMetrica, mejorSolucion, mejorSolucionMetrica);
+                }
+                else
+                {
+                    sumatoria_bt(index + 1, resto, C, N, candidata, candidataMetrica, mejorSolucion, mejorSolucionMetrica);
                 }
             }
         }
@@ -77,18 +82,9 @@ void sumatoria(int *C, int N, int M)
     int *solucion = new int[N + 1]();
     int mejorSolucionMetrica = INT8_MAX;
 
-    sumatoria_bt(M, C, N, sandbox, 0, solucion, mejorSolucionMetrica);
+    sumatoria_bt(0, M, C, N, sandbox, 0, solucion, mejorSolucionMetrica);
     if (mejorSolucionMetrica < INT8_MAX)
     {
-        /*
-        for (int i = 0; i < N; i++)
-        {
-            for (int j = 0; j < solucion[i]; j++)
-            {
-                 cout << C[i] << endl;
-            }
-        }
-        */
         cout << mejorSolucionMetrica << endl;
     }
     else
@@ -115,7 +111,6 @@ int main()
     cin>> P; // cantidad casos de prueba
     
     int M = 0; // número al que se debe llegar con la suma
-    //cin>> M;
 
     for (int i = 0; i < P; i++)
     {
