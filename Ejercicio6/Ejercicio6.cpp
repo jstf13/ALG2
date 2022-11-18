@@ -4,22 +4,28 @@
 #include <limits>
 using namespace std;
 
-
-int buscarSolitario(int *elementos, int inicio, int fin) {
-
+int buscarSolitario(int *elementos, int posicion, int inicio, int fin) {
+    int aBuscar;
+    
     if(inicio == fin) {
-        return -1;
+        return elementos[inicio];
     }
 
     int mitad =  (inicio + fin) / 2;
+    //int mitad = inicio + (fin - inicio) / 2;
+    aBuscar = elementos[posicion + 1];
 
-    if(elementos[inicio] != elementos[inicio + 1]) {
-        return elementos[inicio];
+    cout << "a buscar: " << aBuscar << endl;
+    cout << "posicion: " << posicion << endl;
+
+    if(elementos[posicion] != aBuscar) {
+        cout << "son diferentes: " << endl;
+        return elementos[posicion];
     }
-    if(elementos[mitad] > elementos[inicio + 1]) {
-        return buscarSolitario(elementos, inicio + 2, mitad);
+    if(elementos[mitad] > aBuscar) {
+        return buscarSolitario(elementos, posicion + 2, inicio, mitad);
     }
-    return buscarSolitario(elementos, mitad + 1, fin);
+    return buscarSolitario(elementos, posicion + 2, mitad + 1, fin);
 }
 
 int main() {
@@ -30,27 +36,17 @@ int main() {
     int C[N];
     int elemento;
 
-    for (int i = 0; i<N; i++)
+    for (int i = 0; i < N; i++)
     {
         cin >> elemento;
         C[i] = elemento;
     }
+    int noRepetido = buscarSolitario(C, 0, 0, N-1);
     
-    int noRepetido = buscarSolitario(C, 0, N-1);
-    
-    if (noRepetido >=0)
+    if (noRepetido >= 0)
     {
         cout << noRepetido << endl;
     }
-
-    /*
-    int posicion = -1;
-    posicion = buscarSolitario(C, 0, 101);
-    
-    if(posicion >= 0) {
-        cout << "El elemento no repetido es " <<  posicion << endl;
-    }
-    */
 
     return 0;
 }

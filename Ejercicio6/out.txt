@@ -1,0 +1,21 @@
+a buscar: 3
+posicion: 0
+a buscar: 5
+posicion: 2
+a buscar: 9
+posicion: 4
+a buscar: 11
+posicion: 6
+a buscar: 15
+posicion: 8
+a buscar: 18
+posicion: 10
+a buscar: 19
+posicion: 12
+a buscar: 21
+posicion: 14
+a buscar: 23
+posicion: 16
+a buscar: 26
+posicion: 18
+21
