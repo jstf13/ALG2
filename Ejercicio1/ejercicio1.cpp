@@ -29,7 +29,6 @@ private:
     {
         if (tabla[pos] == NULL)
         {
-            numElem++;
             tabla[pos] = new NodoLista(clave, valor);
             return true;
         }
@@ -43,7 +42,7 @@ private:
             else
             {
                 pos++;
-                if (pos == this->tam)
+                if (pos == this->tam || pos == this->tam * 2)
                     pos = 0;                
                 return insert(tabla, clave, valor, pos);
             }
@@ -136,26 +135,22 @@ public:
 
     void rehash()
     {
-        cout << "Rehashing..." << endl;
         List *nuevaTabla = new List[tam * 2];
         for (int i = 0; i < tam * 2; i++)
         {
             nuevaTabla[i] = NULL;
         }
-        numElem = 0;
 
         for (int i = 0; i < tam; i++)
         {
             List list = tabla[i];
             if(list != NULL)
             {
-                    insert(nuevaTabla, list->clave, list->valor, funcionHash(list->clave, (tam * 2)));
+                insert(nuevaTabla, list->clave, list->valor, funcionHash(list->clave, (tam * 2)));
             }
         }
         tabla = nuevaTabla;
         tam = tam * 2;
-        cout << "Nuevo tamaño: " << tam << endl;
-        cout << "Rehashing done!" << endl;
     };    
 
     void insertar(string clave, int valor)
@@ -163,6 +158,7 @@ public:
         int pos = abs(funcionHash(clave, tam)) % tam;
         if (insert(tabla, clave, valor, pos))
         {
+            numElem++;
             if (factorCarga() > 0.5)
             {
                 rehash();
@@ -226,8 +222,6 @@ int main()
         tabla.insertar(email, 1);
         users--;
     }
-
-    tabla.imprimir();
     
     cout << tabla.numElem << endl;
 
