@@ -115,9 +115,9 @@ private:
         int suma = 0;
         for (int i = 0; i < clave.length(); i++)
         {
-            suma += int(clave[i]);
+            suma = 31 * suma + int(clave[i]);
         }
-        return (suma % miTam);
+        return suma;
     };
 
 public:
@@ -214,7 +214,7 @@ int main()
 
     cin >> users;
 
-    TablaHashCerrada tabla(users);
+    TablaHashCerrada tabla(users * 2);
 
     while (users > 0)
     {
