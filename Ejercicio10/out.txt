@@ -1,148 +1,28 @@
-esMejorSolucion 2 if: 
-BT es mejor solucion 
-esMejorSolucion 2 if: 
-BT es mejor solucion 
-esMejorSolucion 2 if: 
-BT es mejor solucion 
-retirar numero, solucion actual: 123
-numero anterior: 3
-largo: 2
 solucion luego de quitar: 12
-retirar numero, solucion actual: 12
-numero anterior: 2
-largo: 1
 solucion luego de quitar: 1
-esMejorSolucion 1 if: 
-solucionActual[i]: 2
-mejorSolucion[i]: 3
-retirar numero, solucion actual: 132
-numero anterior: 2
-largo: 2
 solucion luego de quitar: 13
-retirar numero, solucion actual: 13
-numero anterior: 3
-largo: 1
 solucion luego de quitar: 1
-esMejorSolucion 1 if: 
-retirar numero, solucion actual: 123
-numero anterior: 3
-largo: 2
 solucion luego de quitar: 12
-retirar numero, solucion actual: 12
-numero anterior: 2
-largo: 1
 solucion luego de quitar: 1
-esMejorSolucion 1 if: 
-solucionActual[i]: 2
-mejorSolucion[i]: 3
-retirar numero, solucion actual: 132
-numero anterior: 2
-largo: 2
 solucion luego de quitar: 13
-retirar numero, solucion actual: 13
-numero anterior: 3
-largo: 1
 solucion luego de quitar: 1
-retirar numero, solucion actual: 1
-numero anterior: 1
-largo: 0
 solucion luego de quitar: 
-esMejorSolucion 1 if: 
-esMejorSolucion 1 if: 
-solucionActual[i]: 1
-mejorSolucion[i]: 2
-retirar numero, solucion actual: 213
-numero anterior: 3
-largo: 2
 solucion luego de quitar: 21
-retirar numero, solucion actual: 21
-numero anterior: 1
-largo: 1
 solucion luego de quitar: 2
-esMejorSolucion 1 if: 
-solucionActual[i]: 1
-mejorSolucion[i]: 3
-retirar numero, solucion actual: 231
-numero anterior: 1
-largo: 2
 solucion luego de quitar: 23
-retirar numero, solucion actual: 23
-numero anterior: 3
-largo: 1
 solucion luego de quitar: 2
-esMejorSolucion 1 if: 
-solucionActual[i]: 1
-mejorSolucion[i]: 2
-retirar numero, solucion actual: 213
-numero anterior: 3
-largo: 2
 solucion luego de quitar: 21
-retirar numero, solucion actual: 21
-numero anterior: 1
-largo: 1
 solucion luego de quitar: 2
-esMejorSolucion 1 if: 
-solucionActual[i]: 1
-mejorSolucion[i]: 3
-retirar numero, solucion actual: 231
-numero anterior: 1
-largo: 2
 solucion luego de quitar: 23
-retirar numero, solucion actual: 23
-numero anterior: 3
-largo: 1
 solucion luego de quitar: 2
-retirar numero, solucion actual: 2
-numero anterior: 2
-largo: 0
 solucion luego de quitar: 
-esMejorSolucion 1 if: 
-esMejorSolucion 1 if: 
-solucionActual[i]: 1
-mejorSolucion[i]: 2
-retirar numero, solucion actual: 312
-numero anterior: 2
-largo: 2
 solucion luego de quitar: 31
-retirar numero, solucion actual: 31
-numero anterior: 1
-largo: 1
 solucion luego de quitar: 3
-esMejorSolucion 1 if: 
-solucionActual[i]: 1
-mejorSolucion[i]: 3
-retirar numero, solucion actual: 321
-numero anterior: 1
-largo: 2
 solucion luego de quitar: 32
-retirar numero, solucion actual: 32
-numero anterior: 2
-largo: 1
 solucion luego de quitar: 3
-esMejorSolucion 1 if: 
-solucionActual[i]: 1
-mejorSolucion[i]: 2
-retirar numero, solucion actual: 312
-numero anterior: 2
-largo: 2
 solucion luego de quitar: 31
-retirar numero, solucion actual: 31
-numero anterior: 1
-largo: 1
 solucion luego de quitar: 3
-esMejorSolucion 1 if: 
-solucionActual[i]: 1
-mejorSolucion[i]: 3
-retirar numero, solucion actual: 321
-numero anterior: 1
-largo: 2
 solucion luego de quitar: 32
-retirar numero, solucion actual: 32
-numero anterior: 2
-largo: 1
 solucion luego de quitar: 3
-retirar numero, solucion actual: 3
-numero anterior: 3
-largo: 0
 solucion luego de quitar: 
-123
+321

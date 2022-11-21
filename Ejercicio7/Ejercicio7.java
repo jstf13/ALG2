@@ -80,11 +80,76 @@ class Lista {
         return ppio == null;
     }
 
+    public int maximaSuma(int s1, int s2, int s3) {
+        int maximo = 0;
+        
+        if (s1 > s2 && s1 > s3) 
+        {
+            maximo = s1;
+        }
+
+        if (s2 > s1 && s2 > s3) 
+        {
+            maximo = s2;
+        }
+
+        if (s3 > s1 && s3 > s2) 
+        {
+            maximo = s3;
+        }
+
+        return maximo;
+    }
+
     public int maximaSumatoriaEnComun(Cola c1, Cola c2, Cola c3, int sumaC1, int sumaC2, int sumaC3) 
     {
-        
-        return 0;
+        int maximaSuma = maximaSuma(sumaC1, sumaC2, sumaC3);
+        int minimoC1;
+        int minimoC2;
+        int minimoC3;
+        boolean encontreMaximoComun = false; 
+
+        if (maximaSuma == sumaC1 && maximaSuma == sumaC2 && maximaSuma == sumaC3) 
+        {
+            encontreMaximoComun = true;
+            return maximaSuma;
+        }
+        else 
+        {
+            if (!c1.esVacia() && !c2.esVacia() && !c3.esVacia() && !encontreMaximoComun) 
+            {
+                if (maximaSuma == sumaC1) 
+                {
+                    minimoC1 = c1.obtenerMenor();
+                    c1.eliminarMenor();
+                    sumaC1 -= minimoC1;
+                    maximaSuma = maximaSuma(sumaC1, sumaC2, sumaC3);
+                    return maximaSumatoriaEnComun(c1, c2, c3, sumaC1, sumaC2, sumaC3);
+                }
+                else {
+                    if (maximaSuma == sumaC2) 
+                    {
+                        minimoC2 = c2.obtenerMenor();
+                        c2.eliminarMenor();
+                        sumaC2 -= minimoC2;
+                        maximaSuma = maximaSuma(sumaC1, sumaC2, sumaC3);
+                        return maximaSumatoriaEnComun(c1, c2, c3, sumaC1, sumaC2, sumaC3);
+                    }
+                    else {
+                        if (maximaSuma == sumaC3) 
+                        {
+                            minimoC3 = c3.obtenerMenor();
+                            c3.eliminarMenor();
+                            sumaC3 -= minimoC3;
+                            maximaSuma = maximaSuma(sumaC1, sumaC2, sumaC3);
+                            return maximaSumatoriaEnComun(c1, c2, c3, sumaC1, sumaC2, sumaC3);
+                        }
+                    }
+                }
+            }
+        }
     }
+
 };
 
 class ColaImpLista extends Cola {
@@ -111,6 +176,7 @@ class ColaImpLista extends Cola {
     public int obtenerMaximaSumaEnComun(Cola c1, Cola c2, Cola c3, int sumaC1, int sumaC2, int sumaC3) {
 		return miLista.maximaSumatoriaEnComun(c1, c2, c3, sumaC1, sumaC2, sumaC3);
 	}
+    
 };
 
 public class Ejercicio7 {
@@ -149,13 +215,7 @@ public class Ejercicio7 {
             sumaC3 += elemento;
         }
 
-        /*
-        System.out.println(sumaC1);
-        System.out.println(sumaC2);
-        System.out.println(sumaC3);
-        */
-
-        int sumaComun = obtenerMaximaSumaEnComun(c1, c2, c3, sumaC1, sumaC2, sumaC3);
+        int sumaComun = c1.obtenerMaximaSumaEnComun(c1, c2, c3, sumaC1, sumaC2, sumaC3);
         System.out.println(sumaComun);
     }
 }
