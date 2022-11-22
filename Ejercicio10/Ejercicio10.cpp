@@ -17,8 +17,6 @@ void retirarElNumero(string *numeros, int objeto, string &solucionActual, bool *
     string numeroAnterior = numeros[objeto];
     int largoNumeroAnterior = solucionActual.length() - numeroAnterior.length();
     solucionActual = solucionActual.substr(0, largoNumeroAnterior);
-    cout << "solucion luego de quitar: " << solucionActual << endl;
-
     usados[objeto] = false;
 }
 
@@ -36,16 +34,16 @@ bool esMejorSolucion(string solucionActual, string mejorSolucion)
     {
         for (int i = 0; i <= solucionActual.length(); i++) 
         {
-            if (solucionActual[i] >= mejorSolucion[i]) 
+            if (solucionActual[i] > mejorSolucion[i]) 
             {
                 return true;
             }
-            /*
-            else
-            {
-                return false;
+            else{
+                if (solucionActual[i] < mejorSolucion[i]) 
+                {
+                    return false;
+                }
             }
-            */
         }
     }
 }
