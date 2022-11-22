@@ -28,8 +28,12 @@ class NodoLista {
 
 class Lista {
     private NodoLista ppio;
+    private NodoLista fin; 
 
-    public Lista() { ppio = null; }
+    public Lista() { 
+        ppio = null; 
+        fin = null; 
+    }
 
     public void insertar(int dato) {
         NodoLista nuevoNodo =  new NodoLista(dato, this.ppio, null);
@@ -39,8 +43,9 @@ class Lista {
         ppio = nuevoNodo;
     }
 
-    public int obtenerMenor() {
-		if(esVacia())
+    public int obtenerDato() {
+		/*
+        if(esVacia())
 			throw new Error("La lista esta vacia");
         NodoLista menor = this.ppio;
         NodoLista aux = this.ppio;
@@ -51,9 +56,20 @@ class Lista {
             aux = aux.sig;
         }
         return menor.dato;
+        */
+
+        if(esVacia())
+			throw new Error("La lista esta vacia");
+
+        NodoLista aux = this.ppio;
+        while(aux.sig != null) {
+            aux = aux.sig;
+        }
+        return aux.dato;
     }
 
-    public void eliminarMenor() {
+    public void eliminar() {
+        /*
 		if(esVacia())
 			throw new Error("La lista esta vacia");
         NodoLista menor = this.ppio;
@@ -74,6 +90,14 @@ class Lista {
         if(menor.sig != null) {
             menor.sig.ant = menor.ant;
         }
+        */
+
+        if(esVacia())
+			throw new Error("La lista esta vacia");
+        
+        NodoLista aux = this.ppio.sig;
+	    ppio = aux;
+
     }
 
     public boolean esVacia() {
@@ -83,19 +107,22 @@ class Lista {
     public int maximaSuma(int s1, int s2, int s3) {
         int maximo = 0;
         
-        if (s1 > s2 && s1 > s3) 
+        if (s1 >= s2 && s1 >= s3) 
         {
             maximo = s1;
         }
-
-        if (s2 > s1 && s2 > s3) 
+        if (s2 >= s1 && s2 >= s3) 
         {
             maximo = s2;
         }
-
-        if (s3 > s1 && s3 > s2) 
+        if (s3 >= s1 && s3 >= s2) 
         {
             maximo = s3;
+        }
+
+        if (s1 == s2 && s2 >= s3) 
+        {
+            maximo = s1;
         }
 
         return maximo;
@@ -103,44 +130,51 @@ class Lista {
 
     public int maximaSumatoriaEnComun(Cola c1, Cola c2, Cola c3, int sumaC1, int sumaC2, int sumaC3) 
     {
+        System.out.println("sumaC1: " + sumaC1);
+        System.out.println("sumaC2: " + sumaC2);
+        System.out.println("sumaC3: " + sumaC3);
+
         int maximaSuma = maximaSuma(sumaC1, sumaC2, sumaC3);
-        int minimoC1;
-        int minimoC2;
-        int minimoC3;
+        System.out.println("maximaSuma: " + maximaSuma);
+
+        int valorC1;
+        int valorC2;
+        int valorC3;
         boolean encontreMaximoComun = false; 
 
-        if (maximaSuma == sumaC1 && maximaSuma == sumaC2 && maximaSuma == sumaC3) 
+        while (!c1.esVacia() && !c2.esVacia() && !c3.esVacia() && !encontreMaximoComun)
         {
-            encontreMaximoComun = true;
-            return maximaSuma;
-        }
-        else 
-        {
-            if (!c1.esVacia() && !c2.esVacia() && !c3.esVacia() && !encontreMaximoComun) 
+            if (maximaSuma == sumaC1 && maximaSuma == sumaC2 && maximaSuma == sumaC3) 
+            {
+                encontreMaximoComun = true;
+                //System.out.println("encontro maximo");
+                return maximaSuma;
+            }
+            else
             {
                 if (maximaSuma == sumaC1) 
                 {
-                    minimoC1 = c1.obtenerMenor();
-                    c1.eliminarMenor();
-                    sumaC1 -= minimoC1;
+                    valorC1 = c1.tope();
+                    c1.desencolar();
+                    sumaC1 -= valorC1;
                     maximaSuma = maximaSuma(sumaC1, sumaC2, sumaC3);
                     return maximaSumatoriaEnComun(c1, c2, c3, sumaC1, sumaC2, sumaC3);
                 }
                 else {
                     if (maximaSuma == sumaC2) 
                     {
-                        minimoC2 = c2.obtenerMenor();
-                        c2.eliminarMenor();
-                        sumaC2 -= minimoC2;
+                        valorC2 = c2.tope();
+                        c2.desencolar();
+                        sumaC2 -= valorC2;
                         maximaSuma = maximaSuma(sumaC1, sumaC2, sumaC3);
                         return maximaSumatoriaEnComun(c1, c2, c3, sumaC1, sumaC2, sumaC3);
                     }
                     else {
                         if (maximaSuma == sumaC3) 
                         {
-                            minimoC3 = c3.obtenerMenor();
-                            c3.eliminarMenor();
-                            sumaC3 -= minimoC3;
+                            valorC3 = c3.tope();
+                            c3.desencolar();
+                            sumaC3 -= valorC3;
                             maximaSuma = maximaSuma(sumaC1, sumaC2, sumaC3);
                             return maximaSumatoriaEnComun(c1, c2, c3, sumaC1, sumaC2, sumaC3);
                         }
@@ -148,6 +182,7 @@ class Lista {
                 }
             }
         }
+        return 0;
     }
 
 };
@@ -162,10 +197,10 @@ class ColaImpLista extends Cola {
         miLista.insertar(el);
     }
     public void desencolar() {
-        miLista.eliminarMenor();
+        miLista.eliminar();
     }
     public int tope() {
-		return miLista.obtenerMenor();
+		return miLista.obtenerDato();
 	}
     public boolean esVacia() {
         return miLista.esVacia();

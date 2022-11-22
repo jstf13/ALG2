@@ -6,6 +6,10 @@
 #include <limits>
 using namespace std;
 
+bool sePuedePodar(string solucionActual, string mejorSolucion) {
+    return false;
+}
+
 void colocarElNumero(string *numeros, int objeto, string &solucionActual, bool *usados)
 {
     solucionActual = solucionActual + numeros[objeto];
@@ -52,24 +56,27 @@ void mejorSuma(string *numeros, int N, bool *usados, string solucionActual, stri
 {
     for (int i = 0; i < N; i++)
     {
-        if (!usados[i])
-        {
-            colocarElNumero(numeros, i, solucionActual, usados);
-
-            if (esMejorSolucion(solucionActual, mejorSolucion))
+        //if (!sePuedePodar(solucionActual, mejorSolucion))
+        //{
+            if (!usados[i])
             {
-                mejorSolucion = solucionActual;
-            }
+                colocarElNumero(numeros, i, solucionActual, usados);
 
-            for(int j = 0; j < N; j++)
-            {
-                if (!usados[j]) 
+                if (esMejorSolucion(solucionActual, mejorSolucion))
                 {
-                    mejorSuma(numeros, N, usados, solucionActual, mejorSolucion);
+                    mejorSolucion = solucionActual;
                 }
+
+                for(int j = 0; j < N; j++)
+                {
+                    if (!usados[j]) 
+                    {
+                        mejorSuma(numeros, N, usados, solucionActual, mejorSolucion);
+                    }
+                }
+                retirarElNumero(numeros, i, solucionActual, usados);
             }
-            retirarElNumero(numeros, i, solucionActual, usados);
-        }
+        //}
     }
 }
 
