@@ -8,7 +8,7 @@ int buscarSolitario(int *elementos, int posicion, int inicio, int fin) {
     int aBuscar;
     int mitad =  (inicio + fin) / 2;
     aBuscar = elementos[posicion + 1];
-
+    
     if(elementos[posicion] != aBuscar) {
         return elementos[posicion];
     }

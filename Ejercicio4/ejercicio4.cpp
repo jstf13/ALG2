@@ -26,8 +26,7 @@ class Grafo
 {
 public:
     virtual void insertarArista(int origen, int destino) = 0;
-    virtual ListaAristas adyacentes(int origen) = 0;
-    virtual void dfs(int salida, bool listaVisitados[]) = 0;
+    virtual ListaAristas adyacentes(int origen) = 0;   
     virtual void imprimir() = 0;
 };
 
@@ -81,22 +80,6 @@ public:
         return listaARetornar;
     }
 
-    void dfs(int salida, bool listaVisitados[])
-    {
-        listaVisitados[salida] = true;
-        ListaAristas adyacentes = listaAdyacencia[salida];
-
-        while (adyacentes != NULL)
-        {
-            if (adyacentes->dato.destino && listaVisitados[adyacentes->dato.destino] == false)
-            {
-                destino = adyacentes->dato.destino;
-                dfs(destino, listaVisitados);
-            }
-            adyacentes = adyacentes->sig;
-        }
-    }
-
     void imprimir()
     {
         for (int i = 1; i <= vertice; i++)
@@ -111,6 +94,70 @@ public:
     }
 };
 
+bool sonTodosTrue(int *listaVisitados, int verticeAEvaluar ,int cantidadVertices)
+{
+    for (int i = 1; i <= cantidadVertices; i++)
+    {
+        if (i != verticeAEvaluar && listaVisitados[i] == false)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+void DFS(Grafo *grafo, int origen, int prohibido, int *visitados){
+    if(origen == prohibido)
+        return;
+
+    visitados[origen] = true;
+    ListaAristas adyacentes = grafo->adyacentes(origen);
+
+    ListaAristas aux = adyacentes;
+    while(aux != NULL){
+        aux = aux->sig;
+    }
+
+    while(adyacentes != NULL){
+        int destinoArista = adyacentes->dato.destino;
+        if(!visitados[destinoArista]){
+            DFS(grafo, destinoArista, prohibido, visitados);
+        }
+        adyacentes = adyacentes->sig;
+    }
+}
+
+int *inicializarVisitados(int cantidadVertices){
+    int *visitados = new int[cantidadVertices + 1];
+    for(int i = 1; i <= cantidadVertices; i++){
+        visitados[i] = false;
+    }
+    return visitados;
+}
+
+
+
+bool esPuntoDeArticulacion(Grafo *grafo, int verticeAEvaluarA, int verticeAEvaluearB, int cantidadDeVertices){
+    int *visitados = inicializarVisitados(cantidadDeVertices);
+
+    ListaAristas adyacentes = grafo->adyacentes(verticeAEvaluarA);
+    int nodoSalida = adyacentes->dato.destino;
+    DFS(grafo, nodoSalida, verticeAEvaluarA, visitados);
+    if(!sonTodosTrue(visitados, verticeAEvaluarA, cantidadDeVertices))
+        return true;
+
+    visitados = inicializarVisitados(cantidadDeVertices);
+
+    adyacentes = grafo->adyacentes(verticeAEvaluearB);
+    nodoSalida = adyacentes->dato.destino;
+
+    DFS(grafo, nodoSalida, verticeAEvaluearB, visitados);
+    if(!sonTodosTrue(visitados, verticeAEvaluearB, cantidadDeVertices))
+        return true;
+
+    return false;
+}
+
 bool *inicializarVisitados(int cantidadVertices, bool visitados[])
 {
     for (int i = 1; i <= cantidadVertices; i++)
@@ -120,38 +167,16 @@ bool *inicializarVisitados(int cantidadVertices, bool visitados[])
     return visitados;
 }
 
-bool sonTodosTrue(bool listaVisitados[], int cantidadVertices)
-{
-    for (int i = 1; i <= cantidadVertices; i++)
-    {
-        if (listaVisitados[i] == 0)
-        {
-            return false;
-        }
-    }
-    return true;
-}
 
 bool esTriconexo(Grafo *grafo, int cantidadVertices)
 {
-    bool *visitados = new bool[cantidadVertices + 1]; 
-
     for (int i = 1; i <= cantidadVertices; i++)
     {
         for (int j = 1; j <= cantidadVertices; j++)
         {
-            inicializarVisitados(cantidadVertices, visitados);
-
-                visitados[i] = true;
-                if(i != j)
-                {
-                    visitados[j] = true;
-                    grafo->dfs(i, visitados);
-                    
-                    if (!sonTodosTrue(visitados, cantidadVertices))
-                        return false;
-
-                }
+            if(i != j && esPuntoDeArticulacion(grafo, i, j, cantidadVertices)){
+                return false;
+            }
         }
     }
     return true;
@@ -171,7 +196,11 @@ int main()
         cin >> origen >> destino;
         grafo->insertarArista(origen, destino);
     }
-
-    cout << esTriconexo(grafo, cantidadVertices) << endl;
+    
+    if(esTriconexo(grafo, cantidadVertices)){
+        cout << 1 << endl;
+    }else{
+        cout << 0 << endl;
+    }
     return 0;
 };
