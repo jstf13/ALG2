@@ -8,17 +8,12 @@ int buscarSolitario(int *elementos, int posicion, int inicio, int fin) {
     int aBuscar;
     int mitad =  (inicio + fin) / 2;
     aBuscar = elementos[posicion + 1];
-
-    //cout << "a buscar: " << aBuscar << endl;
-    //cout << "posicion: " << posicion << endl;
-
     if(elementos[posicion] != aBuscar) {
         return elementos[posicion];
     }
     if(elementos[mitad] > aBuscar) {
         return buscarSolitario(elementos, (posicion + 2), inicio, mitad);
     }
-    //cout << "llamo rec, fin: " << fin << endl;
     return buscarSolitario(elementos, (posicion + 2), (mitad + 1), fin);
 }
 
