@@ -6,26 +6,20 @@ using namespace std;
 
 int buscarSolitario(int *elementos, int posicion, int inicio, int fin) {
     int aBuscar;
-    
-    if(inicio == fin) {
-        return elementos[inicio];
-    }
-
     int mitad =  (inicio + fin) / 2;
-    //int mitad = inicio + (fin - inicio) / 2;
     aBuscar = elementos[posicion + 1];
 
-    cout << "a buscar: " << aBuscar << endl;
-    cout << "posicion: " << posicion << endl;
+    //cout << "a buscar: " << aBuscar << endl;
+    //cout << "posicion: " << posicion << endl;
 
     if(elementos[posicion] != aBuscar) {
-        cout << "son diferentes: " << endl;
         return elementos[posicion];
     }
     if(elementos[mitad] > aBuscar) {
-        return buscarSolitario(elementos, posicion + 2, inicio, mitad);
+        return buscarSolitario(elementos, (posicion + 2), inicio, mitad);
     }
-    return buscarSolitario(elementos, posicion + 2, mitad + 1, fin);
+    //cout << "llamo rec, fin: " << fin << endl;
+    return buscarSolitario(elementos, (posicion + 2), (mitad + 1), fin);
 }
 
 int main() {
