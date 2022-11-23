@@ -14,12 +14,14 @@ class NodoLista {
     public NodoLista ant;
     public int dato;
     public NodoLista() {};
-    public NodoLista(int unDato, NodoLista unSig, NodoLista unAnt) {
+    public NodoLista(int unDato, NodoLista unSig, NodoLista unAnt) 
+    {
         dato = unDato;
         sig = unSig;
         ant = unAnt;
     };
-    public NodoLista(int unDato) {
+    public NodoLista(int unDato) 
+    {
         dato = unDato;
         sig = null;
         ant = null;
@@ -30,81 +32,52 @@ class Lista {
     private NodoLista ppio;
     private NodoLista fin; 
 
-    public Lista() { 
+    public Lista() 
+    { 
         ppio = null; 
         fin = null; 
     }
 
-    public void insertar(int dato) {
-        NodoLista nuevoNodo =  new NodoLista(dato, this.ppio, null);
-        if(this.ppio != null) {
-            this.ppio.ant = nuevoNodo;
+    public void insertar(int dato) 
+    {
+        NodoLista nuevoNodo =  new NodoLista();
+        nuevoNodo.dato = dato;
+        nuevoNodo.sig = null;
+
+        if(esVacia()) {
+            this.ppio = nuevoNodo;
         }
-        ppio = nuevoNodo;
+        else 
+        {
+            fin.sig = nuevoNodo;
+        }
+
+        fin = nuevoNodo;
     }
 
-    public int obtenerDato() {
-		/*
-        if(esVacia())
-			throw new Error("La lista esta vacia");
-        NodoLista menor = this.ppio;
-        NodoLista aux = this.ppio;
-        while(aux != null) {
-            if(menor.dato > aux.dato) {
-                menor = aux;
-            }
-            aux = aux.sig;
-        }
-        return menor.dato;
-        */
-
-        if(esVacia())
-			throw new Error("La lista esta vacia");
-
-        NodoLista aux = this.ppio;
-        while(aux.sig != null) {
-            aux = aux.sig;
-        }
-        return aux.dato;
+    public int obtenerDato() 
+    {
+        return ppio.dato;
     }
 
-    public void eliminar() {
-        /*
-		if(esVacia())
-			throw new Error("La lista esta vacia");
-        NodoLista menor = this.ppio;
-        NodoLista aux = this.ppio;
-        while(aux != null) {
-            if(menor.dato > aux.dato) {
-                menor = aux;
-            }
-            aux = aux.sig;
-        }
-
-        // elimino el nodo que contiene el menor dato
-        if(menor.ant != null) {
-            menor.ant.sig = menor.sig;
-        }else {
-            ppio = menor.sig;
-        }
-        if(menor.sig != null) {
-            menor.sig.ant = menor.ant;
-        }
-        */
-
+    public void eliminar() 
+    {
         if(esVacia())
 			throw new Error("La lista esta vacia");
         
-        NodoLista aux = this.ppio.sig;
-	    ppio = aux;
-
+        ppio = ppio.sig;
+        if(ppio == null) {
+            this.fin = null;
+        }
     }
 
-    public boolean esVacia() {
+    public boolean esVacia() 
+    {
         return ppio == null;
     }
 
-    public int maximaSuma(int s1, int s2, int s3) {
+    public int maximaSuma(int s1, int s2, int s3) 
+    {
         int maximo = 0;
         
         if (s1 >= s2 && s1 >= s3) 
@@ -119,7 +92,6 @@ class Lista {
         {
             maximo = s3;
         }
-
         if (s1 == s2 && s2 >= s3) 
         {
             maximo = s1;
@@ -130,13 +102,7 @@ class Lista {
 
     public int maximaSumatoriaEnComun(Cola c1, Cola c2, Cola c3, int sumaC1, int sumaC2, int sumaC3) 
     {
-        System.out.println("sumaC1: " + sumaC1);
-        System.out.println("sumaC2: " + sumaC2);
-        System.out.println("sumaC3: " + sumaC3);
-
         int maximaSuma = maximaSuma(sumaC1, sumaC2, sumaC3);
-        System.out.println("maximaSuma: " + maximaSuma);
-
         int valorC1;
         int valorC2;
         int valorC3;
@@ -147,7 +113,7 @@ class Lista {
             if (maximaSuma == sumaC1 && maximaSuma == sumaC2 && maximaSuma == sumaC3) 
             {
                 encontreMaximoComun = true;
-                //System.out.println("encontro maximo");
+                //System.out.println("encontre maximo: " + maximaSuma + ", encontreMaximoComun: " + encontreMaximoComun);
                 return maximaSuma;
             }
             else
@@ -221,8 +187,8 @@ public class Ejercicio7 {
         Cola c1 = new ColaImpLista();
 		Cola c2 = new ColaImpLista();
         Cola c3 = new ColaImpLista();
-
         int elemento;
+
         int sumaC1 = 0;
         int largoC1 = entrada.nextInt();
         for (int i = 0; i < largoC1; i++)
