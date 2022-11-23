@@ -7,7 +7,19 @@
 using namespace std;
 
 bool sePuedePodar(string solucionActual, string mejorSolucion) {
-    return false;
+    for (int i = 0; i < solucionActual.length(); i++)
+    {
+        if (solucionActual[i] > mejorSolucion[i]) 
+        {
+            return false;
+        }
+        else{
+            if (solucionActual[i] < mejorSolucion[i]) 
+            {
+                return true;
+            }
+        }
+    }
 }
 
 void colocarElNumero(string *numeros, int objeto, string &solucionActual, bool *usados)
@@ -56,8 +68,8 @@ void mejorSuma(string *numeros, int N, bool *usados, string solucionActual, stri
 {
     for (int i = 0; i < N; i++)
     {
-        //if (!sePuedePodar(solucionActual, mejorSolucion))
-        //{
+        if (!sePuedePodar(solucionActual, mejorSolucion))
+        {
             if (!usados[i])
             {
                 colocarElNumero(numeros, i, solucionActual, usados);
@@ -76,7 +88,7 @@ void mejorSuma(string *numeros, int N, bool *usados, string solucionActual, stri
                 }
                 retirarElNumero(numeros, i, solucionActual, usados);
             }
-        //}
+        }
     }
 }
 
