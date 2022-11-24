@@ -25,7 +25,7 @@ private:
         return (float)this->numElem / this->tam;
     };
 
-    bool insert(List *tabla, string clave, int valor, int pos)
+    bool insertar(List *tabla, string clave, int valor, int pos)
     {
         if (tabla[pos] == NULL)
         {
@@ -44,12 +44,12 @@ private:
                 pos++;
                 if (pos == this->tam || pos == this->tam * 2)
                     pos = 0;                
-                return insert(tabla, clave, valor, pos);
+                return insertar(tabla, clave, valor, pos);
             }
         }
     };
 
-    bool deleteElem(string clave, List &list)
+    bool eliminarElemento(string clave, List &list)
     {
         if (list == NULL)
         {
@@ -66,7 +66,7 @@ private:
             }
             else
             {
-                return deleteElem(clave, list->sig);
+                return eliminarElemento(clave, list->sig);
             }
         }
     };
@@ -146,7 +146,7 @@ public:
             List list = tabla[i];
             if(list != NULL)
             {
-                insert(nuevaTabla, list->clave, list->valor, funcionHash(list->clave, (tam * 2)));
+                insertar(nuevaTabla, list->clave, list->valor, funcionHash(list->clave, (tam * 2)));
             }
         }
         tabla = nuevaTabla;
@@ -156,7 +156,7 @@ public:
     void insertar(string clave, int valor)
     {
         int pos = abs(funcionHash(clave, tam)) % tam;
-        if (insert(tabla, clave, valor, pos))
+        if (insertar(tabla, clave, valor, pos))
         {
             numElem++;
             if (factorCarga() > 0.5)
@@ -166,10 +166,10 @@ public:
         }
     };
 
-    void deleteElem(string clave)
+    void eliminarElemento(string clave)
     {
         int pos = abs(funcionHash(clave, tam)) % tam;
-        if (deleteElem(clave, tabla[pos]))
+        if (eliminarElemento(clave, tabla[pos]))
         {
             numElem--;
         }

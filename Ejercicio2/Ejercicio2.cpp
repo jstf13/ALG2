@@ -34,7 +34,6 @@ private:
 
     void flotar(int pos)
     {
-        // trato de flotar si no soy la raiz
         if (pos > 1)
         {
             int posPadre = padre(pos);
@@ -51,7 +50,6 @@ private:
         int posHijoIzq = izq(pos);
         int posHijoDer = der(pos);
 
-        // si tiene los dos hijos
         if (posHijoIzq < posTope && posHijoDer < posTope)
         {
             int posHijoMenor = arr[posHijoIzq] < arr[posHijoDer] ? posHijoIzq : posHijoDer;
@@ -60,7 +58,6 @@ private:
                 intercambiar(pos, posHijoMenor);
                 hundir(posHijoMenor);
             }
-            // si tiene solo hijo izquierdo
         }
         else if (posHijoIzq < posTope)
         {
@@ -114,7 +111,7 @@ public:
 int main()
 {
     int n;
-    cin>> n; // elementos del array
+    cin>> n;
     Min_Heap *heap = new Min_Heap(n);
   
     for(int i=0; i<n; i++){
