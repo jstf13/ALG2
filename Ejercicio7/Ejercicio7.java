@@ -113,7 +113,6 @@ class Lista {
             if (maximaSuma == sumaC1 && maximaSuma == sumaC2 && maximaSuma == sumaC3) 
             {
                 encontreMaximoComun = true;
-                //System.out.println("encontre maximo: " + maximaSuma + ", encontreMaximoComun: " + encontreMaximoComun);
                 return maximaSuma;
             }
             else
@@ -123,29 +122,19 @@ class Lista {
                     valorC1 = c1.tope();
                     c1.desencolar();
                     sumaC1 -= valorC1;
-                    maximaSuma = maximaSuma(sumaC1, sumaC2, sumaC3);
-                    return maximaSumatoriaEnComun(c1, c2, c3, sumaC1, sumaC2, sumaC3);
                 }
-                else {
-                    if (maximaSuma == sumaC2) 
-                    {
-                        valorC2 = c2.tope();
-                        c2.desencolar();
-                        sumaC2 -= valorC2;
-                        maximaSuma = maximaSuma(sumaC1, sumaC2, sumaC3);
-                        return maximaSumatoriaEnComun(c1, c2, c3, sumaC1, sumaC2, sumaC3);
-                    }
-                    else {
-                        if (maximaSuma == sumaC3) 
-                        {
-                            valorC3 = c3.tope();
-                            c3.desencolar();
-                            sumaC3 -= valorC3;
-                            maximaSuma = maximaSuma(sumaC1, sumaC2, sumaC3);
-                            return maximaSumatoriaEnComun(c1, c2, c3, sumaC1, sumaC2, sumaC3);
-                        }
-                    }
+                else if (maximaSuma == sumaC2) 
+                {
+                    valorC2 = c2.tope();
+                    c2.desencolar();
+                    sumaC2 -= valorC2; 
                 }
+                else  {
+                    valorC3 = c3.tope();
+                    c3.desencolar();
+                    sumaC3 -= valorC3;
+                }
+                maximaSuma = maximaSuma(sumaC1, sumaC2, sumaC3);
             }
         }
         return 0;
@@ -163,7 +152,9 @@ class ColaImpLista extends Cola {
         miLista.insertar(el);
     }
     public void desencolar() {
-        miLista.eliminar();
+        if(!this.esVacia()) {
+            miLista.eliminar();
+        }
     }
     public int tope() {
 		return miLista.obtenerDato();
